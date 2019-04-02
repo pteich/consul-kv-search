@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"text/tabwriter"
-
 	"github.com/hashicorp/consul/api"
 	"github.com/jawher/mow.cli"
 	"github.com/pteich/consul-kv-search/search"
+	"log"
+	"os"
+	"text/tabwriter"
 )
 
 var Version string
@@ -63,5 +63,8 @@ func main() {
 
 	}
 
-	app.Run(os.Args)
+	err := app.Run(os.Args)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

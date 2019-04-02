@@ -1,11 +1,10 @@
 package search
 
 import (
-	"regexp"
-
 	"github.com/gobwas/glob"
 	"github.com/hashicorp/consul/api"
 	"github.com/pkg/errors"
+	"regexp"
 )
 
 type ResultPair struct {
