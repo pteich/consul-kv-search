@@ -53,10 +53,11 @@ func main() {
 			os.Exit(1)
 		}
 
-		w := new(tabwriter.Writer)
-		w.Init(os.Stdout, 0, 8, 0, '\t', 0)
+		w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', tabwriter.Debug)
+		fmt.Fprintf(w, "%s\t%s\t", "Key", "Value")
+		fmt.Fprintln(w)
 		for _, element := range foundPairs {
-			fmt.Fprintf(w, "%s\t%s\n", element.Key, element.Value)
+			fmt.Fprintf(w, "%s\t%s\t", element.Key, element.Value)
 			fmt.Fprintln(w)
 		}
 		w.Flush()
