@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
+	"github.com/gosuri/uitable"
 	"github.com/hashicorp/consul/api"
 	"github.com/jawher/mow.cli"
 	"github.com/pteich/consul-kv-search/search"
 	"log"
 	"os"
-	"text/tabwriter"
 )
 
 var Version string
@@ -38,8 +38,7 @@ func main() {
 
 		consulClient, err := api.NewClient(consulConfig)
 		if err != nil {
-			fmt.Printf("Could not connect to Consul at %s - %v\n", *configConsulAddr, err)
-			os.Exit(1)
+			log.Fatalf("Could not connect to Consul at %s - %v\n", *configConsulAddr, err)
 		}
 
 		consulSearch := search.NewConsulSearch(consulClient)
@@ -58,8 +57,7 @@ func main() {
 			foundPairs, err = consulSearch.SearchGlob(*configQuery, *configPath, scope)
 		}
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			log.Fatal(err)
 		}
 
 		found := len(foundPairs)
@@ -69,17 +67,17 @@ func main() {
 			return
 		}
 
-		fmt.Printf("%d entries found\n", found)
+		fmt.Printf("%d entries found\n\n", found)
 
-		w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', tabwriter.Debug)
-		fmt.Fprintf(w, "%s\t%s\t", "Key", "Value")
-		fmt.Fprintln(w)
+		table := uitable.New()
+		table.MaxColWidth = 80
+		table.Wrap = true
+
+		table.AddRow("Key", "Value")
 		for _, element := range foundPairs {
-			fmt.Fprintf(w, "%s\t%s\t", element.Key, element.Value)
-			fmt.Fprintln(w)
+			table.AddRow(element.Key, element.Value)
 		}
-		w.Flush()
-
+		fmt.Println(table)
 	}
 
 	err := app.Run(os.Args)

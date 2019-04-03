@@ -5,6 +5,7 @@ go 1.12
 require (
 	github.com/gobwas/glob v0.2.3
 	github.com/google/btree v1.0.0 // indirect
+	github.com/gosuri/uitable v0.0.0-20160404203958-36ee7e946282
 	github.com/hashicorp/consul v1.4.4
 	github.com/hashicorp/go-cleanhttp v0.5.1 // indirect
 	github.com/hashicorp/go-rootcerts v1.0.0 // indirect
@@ -12,6 +13,7 @@ require (
 	github.com/hashicorp/golang-lru v0.5.1 // indirect
 	github.com/hashicorp/serf v0.8.2 // indirect
 	github.com/jawher/mow.cli v1.0.5
+	github.com/mattn/go-runewidth v0.0.4 // indirect
 	github.com/miekg/dns v1.1.8 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/go-testing-interface v1.0.0 // indirect
