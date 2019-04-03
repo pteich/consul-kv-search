@@ -7,6 +7,14 @@ import (
 	"regexp"
 )
 
+type Scope int
+
+const (
+	Keys Scope = iota
+	Values
+	Everywhere
+)
+
 type ResultPair struct {
 	Key   string
 	Value string
@@ -16,7 +24,7 @@ type ConsulSearch struct {
 	consulClient *api.Client
 }
 
-func (cs *ConsulSearch) SearchGlob(query string, path string) ([]ResultPair, error) {
+func (cs *ConsulSearch) SearchGlob(query string, path string, scope Scope) ([]ResultPair, error) {
 
 	foundPairs := make([]ResultPair, 0)
 	pattern := glob.MustCompile(query)
@@ -27,7 +35,18 @@ func (cs *ConsulSearch) SearchGlob(query string, path string) ([]ResultPair, err
 	}
 
 	for _, element := range pairs {
-		if pattern.Match(string(element.Value)) {
+
+		found := false
+		switch scope {
+		case Keys:
+			found = pattern.Match(element.Key)
+		case Values:
+			found = pattern.Match(string(element.Value))
+		default:
+			found = pattern.Match(string(element.Value)) || pattern.Match(element.Key)
+		}
+
+		if found {
 			pair := ResultPair{
 				Key:   string(element.Key),
 				Value: string(element.Value),
@@ -39,7 +58,7 @@ func (cs *ConsulSearch) SearchGlob(query string, path string) ([]ResultPair, err
 	return foundPairs, nil
 }
 
-func (cs *ConsulSearch) SearchRegex(query string, path string) ([]ResultPair, error) {
+func (cs *ConsulSearch) SearchRegex(query string, path string, scope Scope) ([]ResultPair, error) {
 	foundPairs := make([]ResultPair, 0)
 	pattern := regexp.MustCompile(query)
 
@@ -49,7 +68,18 @@ func (cs *ConsulSearch) SearchRegex(query string, path string) ([]ResultPair, er
 	}
 
 	for _, element := range pairs {
-		if pattern.Match(element.Value) {
+
+		found := false
+		switch scope {
+		case Keys:
+			found = pattern.Match([]byte(element.Key))
+		case Values:
+			found = pattern.Match(element.Value)
+		default:
+			found = pattern.Match(element.Value) || pattern.Match([]byte(element.Key))
+		}
+
+		if found {
 			pair := ResultPair{
 				Key:   string(element.Key),
 				Value: string(element.Value),
