@@ -26,4 +26,6 @@ consul-kv-search -a "127.0.0.1:8500" -r ".*data.*"
 | `-p --path`    | /                     | path (prefix) in KV to start search |
 | `-g --glob`    | true                  | interpret query as glob pattern |
 | `-r --regex`   | false                 | interpret query as regex pattern |
+| `--keys`       | false                 | search in keys only |
+| `--values`       | false                 | search in values only |
  

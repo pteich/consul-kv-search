@@ -1,5 +1,5 @@
 BINARY=consul-kv-search
-VERSION=1.0.0
+VERSION=1.1.0
 BUILD_TIME=`date +%FT%T%z`
 GOX_OSARCH="darwin/amd64 linux/386 linux/amd64 windows/386 windows/amd64"
 
