@@ -1,10 +1,11 @@
 package search
 
 import (
+	"regexp"
+
 	"github.com/gobwas/glob"
 	"github.com/hashicorp/consul/api"
 	"github.com/pkg/errors"
-	"regexp"
 )
 
 type Scope int
@@ -98,7 +99,7 @@ func (cs *ConsulSearch) getKVPairs(path string) (api.KVPairs, error) {
 	return pairs, err
 }
 
-func NewConsulSearch(consulClient *api.Client) *ConsulSearch {
+func New(consulClient *api.Client) *ConsulSearch {
 	return &ConsulSearch{
 		consulClient: consulClient,
 	}

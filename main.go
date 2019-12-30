@@ -2,12 +2,14 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
+
 	"github.com/gosuri/uitable"
 	"github.com/hashicorp/consul/api"
 	"github.com/jawher/mow.cli"
+
 	"github.com/pteich/consul-kv-search/search"
-	"log"
-	"os"
 )
 
 var Version string
@@ -30,18 +32,16 @@ func main() {
 	)
 
 	app.Action = func() {
-		fmt.Println(*configConsulAddr, *configToken, *configPath, *configQueryGlob, *configQueryRegex, *configQuery)
-
 		consulConfig := api.DefaultConfig()
 		consulConfig.Address = *configConsulAddr
 		consulConfig.Token = *configToken
 
 		consulClient, err := api.NewClient(consulConfig)
 		if err != nil {
-			log.Fatalf("Could not connect to Consul at %s - %v\n", *configConsulAddr, err)
+			log.Fatalf("could not connect to Consul at %s - %v", *configConsulAddr, err)
 		}
 
-		consulSearch := search.NewConsulSearch(consulClient)
+		consulSearch := search.New(consulClient)
 		var foundPairs []search.ResultPair
 
 		scope := search.Everywhere
@@ -73,9 +73,9 @@ func main() {
 		table.MaxColWidth = 80
 		table.Wrap = true
 
-		table.AddRow("Key", "Value")
 		for _, element := range foundPairs {
 			table.AddRow(element.Key, element.Value)
+			table.AddRow("")
 		}
 		fmt.Println(table)
 	}
