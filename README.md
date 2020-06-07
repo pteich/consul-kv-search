@@ -6,7 +6,7 @@ You can provide a search query as glob pattern (e.g. "*data*") or regular expres
 ## Install
 
 Download a pre-compiled binary for your operating system from here: https://github.com/pteich/consul-kv-search/releases
-You need just this binary. It works on OSX (Darwin), Linux and Windows.
+You need just this binary. It works on macOS (OSX/Darwin), Linux and Windows.
 
 ## Usage
 
