@@ -5,7 +5,7 @@ import (
 
 	"github.com/gobwas/glob"
 	"github.com/hashicorp/consul/api"
-	"github.com/pkg/errors"
+	"github.com/pteich/errors"
 )
 
 type Scope int
