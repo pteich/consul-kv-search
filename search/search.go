@@ -26,7 +26,6 @@ type ConsulSearch struct {
 }
 
 func (cs *ConsulSearch) SearchGlob(query string, path string, scope Scope) ([]ResultPair, error) {
-
 	foundPairs := make([]ResultPair, 0)
 	pattern := glob.MustCompile(query)
 
@@ -36,7 +35,6 @@ func (cs *ConsulSearch) SearchGlob(query string, path string, scope Scope) ([]Re
 	}
 
 	for _, element := range pairs {
-
 		found := false
 		switch scope {
 		case Keys:
@@ -49,7 +47,7 @@ func (cs *ConsulSearch) SearchGlob(query string, path string, scope Scope) ([]Re
 
 		if found {
 			pair := ResultPair{
-				Key:   string(element.Key),
+				Key:   element.Key,
 				Value: string(element.Value),
 			}
 			foundPairs = append(foundPairs, pair)
