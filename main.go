@@ -15,15 +15,15 @@ import (
 var Version string
 
 func main() {
-
 	app := cli.App("consul-kv-search", "CLI tool to search for data in Consul K/V store. https://github.com/pteich/consul-kv-search")
 	app.Version("v version", Version)
-	app.Spec = "[-a] [-t] [-p] [-g|-r] [--keys|--values] QUERY"
+	app.Spec = "[-a] [-t] [-p] [-r] [-w] [--keys|--values] QUERY"
 
 	var (
 		configConsulAddr       = app.StringOpt("a address", "127.0.0.1:8500", "Address and port of Consul server")
 		configToken            = app.StringOpt("t token", "", "Consul ACL token to use")
 		configPath             = app.StringOpt("p path", "/", "K/V path to start search")
+		configWrap             = app.BoolOpt("w wrap", false, "Wrap text in output table")
 		configQueryRegex       = app.BoolOpt("r regex", false, "Query interpreted as regular expression (instead of glob)")
 		configQueryScopeKeys   = app.BoolOpt("keys", false, "Search keys only (default everyhwere)")
 		configQueryScopeValues = app.BoolOpt("values", false, "Search values only (default everyhwere)")
@@ -69,13 +69,15 @@ func main() {
 		fmt.Printf("%d entries found\n\n", found)
 
 		table := uitable.New()
-		table.MaxColWidth = 80
-		table.Wrap = true
+		table.MaxColWidth = 100
+		table.Wrap = *configWrap
+		table.Separator = " | "
 
 		for _, element := range foundPairs {
 			table.AddRow(element.Key, element.Value)
 			table.AddRow("")
 		}
+
 		fmt.Println(table)
 	}
 
