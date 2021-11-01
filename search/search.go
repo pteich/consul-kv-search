@@ -92,7 +92,10 @@ func (cs *ConsulSearch) SearchRegex(query string, path string, scope Scope) ([]R
 
 func (cs *ConsulSearch) getKVPairs(path string) (api.KVPairs, error) {
 	kv := cs.consulClient.KV()
-	pairs, _, err := kv.List(path, nil)
+	pairs, _, err := kv.List(path, &api.QueryOptions{
+		AllowStale:        true,
+		UseCache:          true,
+	})
 
 	return pairs, err
 }
